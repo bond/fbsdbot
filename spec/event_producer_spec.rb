@@ -283,6 +283,27 @@ describe "EventProducer" do
     event.target.should == 'nick'
     event.message.should == 'End of /WHO list.'
   end
+  
+  it "should create the correct event ehn receiving a WHO reply (352)" do
+    # not sure what H means and 4 means
+    event = @ep.parse_line ":irc.homelien.no 352 botname #channel user_name example.com irc.efnet.pl nick H :4 real_name\r\n"
+    event.should be_instance_of(WhoEvent)
+    
+    event.channel.should == "#channel"
+    user = event.user
+    user.should be_instance_of(User)
+    user.nick.should == "nick"
+    user.user.should == "user_name"
+    user.host.should == "example.com"
+    event.server.should == "irc.homelien.no"
+    event.user_server.should == "irc.efnet.pl"
+    event.message.should == "4 real_name"
+  end
+  
+  # fc4 @bitmask=3, @host="81.167.229.37", @hostmask_exp=/^jp_?tix!markus@(81\.167\.229\.37|rykroken\.net|prefixpath\.net)$/, @nick="jptix", @user="markus">>}
+  # 2009-04-11 22:21:09 (debug)  :: {:incoming=>":irc.homelien.no 352 utf8 #mac1 markus 81.167.229.37 irc.efnet.pl jptix H :4 mrc\r\n"}
+  # 2009-04-11 22:21:09 (debug) #<EMWorker:#44dacf2 EFnet [cY:rY]> :: unknown event for {:server=>"irc.homelien.no", :command=>"352", :params=>["utf8", "#mac1", "markus", "81.167.229.37", "irc.efnet.pl", "jptix", "H", "4 mrc"]}
+  # 2
 
 end
 
