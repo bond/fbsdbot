@@ -29,6 +29,7 @@ require "lib/irc/events/shutdown_event"
 require "lib/irc/events/topic_event"
 require "lib/irc/events/topic_info_event"
 require "lib/irc/events/unavailable_resource_event"
+require "lib/irc/events/end_of_who_event"
 
 module FBSDBot
   module IRC
@@ -38,6 +39,7 @@ module FBSDBot
         '311'    => WhoisUserEvent,
         '312'    => WhoisServerEvent,
         '313'    => WhoisOperatorEvent,
+        '315'    => EndOfWhoEvent,
         '317'    => WhoisIdleEvent,
         '318'    => EndOfWhoisEvent,
         '319'    => WhoisChannelsEvent,

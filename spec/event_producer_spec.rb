@@ -274,5 +274,15 @@ describe "EventProducer" do
     event.message.should == "Nick/channel is temporarily unavailable"
     event.server.should == "irc.daxnet.no"
   end
+  
+  it "should create the correct event when receiving 'end of who' event (315)" do
+    event = @ep.parse_line ":irc.homelien.no 315 botname nick :End of /WHO list.\r\n"
+    event.should be_instance_of(EndOfWhoEvent)
+    
+    event.to.should == 'botname'
+    event.target.should == 'nick'
+    event.message.should == 'End of /WHO list.'
+  end
 
 end
+
