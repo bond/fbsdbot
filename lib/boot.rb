@@ -8,6 +8,7 @@ require 'rubygems'
 require 'eventmachine'
 
 require 'lib/logger'
+require 'lib/core_ext/eventmachine'
 require 'lib/core_ext/array'
 require 'lib/core_ext/string'
 require 'lib/core_ext/boolean'
