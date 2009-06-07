@@ -1,3 +1,4 @@
+# encoding: utf-8
 require "#{File.dirname(__FILE__)}/spec_helper"
 
 describe "EventProducer" do
@@ -273,6 +274,31 @@ describe "EventProducer" do
     event.message.should == "Nick/channel is temporarily unavailable"
     event.server.should == "irc.daxnet.no"
   end
-
+  
+  it "should create the correct event when receiving 'end of who' event (315)" do
+    event = @ep.parse_line ":irc.homelien.no 315 botname nick :End of /WHO list.\r\n"
+    event.should be_instance_of(EndOfWhoEvent)
+    
+    event.to.should == 'botname'
+    event.target.should == 'nick'
+    event.message.should == 'End of /WHO list.'
+  end
+  
+  it "should create the correct event ehn receiving a WHO reply (352)" do
+    # not sure what H means and 4 means
+    event = @ep.parse_line ":irc.homelien.no 352 botname #channel user_name example.com irc.efnet.pl nick H :4 real_name\r\n"
+    event.should be_instance_of(WhoEvent)
+    
+    event.channel.should == "#channel"
+    user = event.user
+    user.should be_instance_of(User)
+    user.nick.should == "nick"
+    user.user.should == "user_name"
+    user.host.should == "example.com"
+    event.server.should == "irc.homelien.no"
+    event.user_server.should == "irc.efnet.pl"
+    event.message.should == "4 real_name"
+  end
+  
 end
 

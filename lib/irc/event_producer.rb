@@ -1,3 +1,4 @@
+# encoding: utf-8
 require "lib/irc/events/event"
 require "lib/irc/events/replyable"
 require "lib/irc/events/private_message_event"
@@ -29,6 +30,8 @@ require "lib/irc/events/shutdown_event"
 require "lib/irc/events/topic_event"
 require "lib/irc/events/topic_info_event"
 require "lib/irc/events/unavailable_resource_event"
+require "lib/irc/events/end_of_who_event"
+require "lib/irc/events/who_event"
 
 module FBSDBot
   module IRC
@@ -38,11 +41,13 @@ module FBSDBot
         '311'    => WhoisUserEvent,
         '312'    => WhoisServerEvent,
         '313'    => WhoisOperatorEvent,
+        '315'    => EndOfWhoEvent,
         '317'    => WhoisIdleEvent,
         '318'    => EndOfWhoisEvent,
         '319'    => WhoisChannelsEvent,
         '332'    => TopicEvent,
         '333'    => TopicInfoEvent,
+        '352'    => WhoEvent,
         '353'    => NamesEvent,
         '366'    => EndOfNamesEvent,
         '372'    => MotdEvent,

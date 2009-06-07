@@ -1,3 +1,4 @@
+# encoding: utf-8
 require "#{File.dirname(__FILE__)}/spec_helper"
 
 describe "FBSDBot::IRC::Parser" do
@@ -40,6 +41,12 @@ describe "FBSDBot::IRC::Parser" do
   
   it "should parse messages with UTF-8 chars" do
     val = parse_message(":jptix!markus@81.167.229.37 PRIVMSG #bot-test.no :æ ø å\r\n")
+    val[:params].last.should == "æ ø å"
+  end
+  
+  it "should parse messages with extra spaces" do
+    val = parse_message(":irc.daxnet.no 315 utf8 iKick  :End of /WHO list.\r\n")
+    val[:params].should_not be_nil
   end
   
   it "should parse a PING request" do

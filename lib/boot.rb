@@ -1,10 +1,16 @@
+# encoding: utf-8
 # CORE
 require 'digest/sha1'
 require 'pp'
 require 'yaml'
 
 # GEMS
-require 'rubygems'
+begin
+  require 'rubygems'
+  gem "eventmachine"
+rescue LoadError
+end
+
 require 'eventmachine'
 
 require 'lib/logger'
@@ -29,4 +35,3 @@ Log = FBSDBot::Logger.new
 module FBSDBot
   VERSION = "0.1"
 end
-
