@@ -15,6 +15,7 @@ Spec::Rake::SpecTask.new do |t|
 end
 
 namespace :fix do
+  desc 'Add encoding comments to all files'
   task :magic_comments do
     encoding_comment = /^# encoding: utf-8/
     
