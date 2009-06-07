@@ -45,6 +45,7 @@ module FBSDBot
         @connected = true
         Log.info "Connected.", self
 
+        Plugin.run_event ConnectEvent.new(self)
         login
       end
       
