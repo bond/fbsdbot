@@ -300,5 +300,15 @@ describe "EventProducer" do
     event.message.should == "4 real_name"
   end
   
+  it "should create the correct event when receiving 'no such nick/channel' (401)" do
+    event = @ep.parse_line ":irc.daxnet.no 401 botname username :No such nick/channel\r\n"
+    event.should be_instance_of(NoSuchNickChannelEvent)
+
+    event.server.should == "irc.daxnet.no"
+    event.to.should == "botname"
+    event.target.should == "username"
+    event.message.should == "No such nick/channel"
+  end
+
 end
 

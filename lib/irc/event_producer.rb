@@ -32,6 +32,7 @@ require "lib/irc/events/topic_info_event"
 require "lib/irc/events/unavailable_resource_event"
 require "lib/irc/events/end_of_who_event"
 require "lib/irc/events/who_event"
+require "lib/irc/events/no_such_nick_channel_event"
 
 module FBSDBot
   module IRC
@@ -53,6 +54,7 @@ module FBSDBot
         '372'    => MotdEvent,
         '375'    => MotdStartEvent,
         '376'    => EndOfMotdEvent,
+        '401'    => NoSuchNickChannelEvent,
         '422'    => NoMotdEvent,
         '433'    => NicknameInUseEvent,
         '437'    => UnavailableResourceEvent,
