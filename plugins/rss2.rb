@@ -17,16 +17,13 @@ FBSDBot::Plugin.define "rss" do
   commands %w{rss}
 
   @rssfeeds = {
-    :dragonfly => 'http://gitweb.dragonflybsd.org/dragonfly.git/rss'
+    :src => 'http://gitweb.dragonflybsd.org/dragonfly.git/rss'
   }
   @maxitems = 5
   @lastitem = {}
-  @output = {
-    :dragonfly => { :EFnet => '#bot-test.no' }
-  }
   @started = false
   
-  EventMachine::PeriodicTimer.new(10) do
+  EventMachine::PeriodicTimer.new(30) do
     if @started
       @rssfeeds.each do |name,uri|
 
@@ -58,9 +55,9 @@ FBSDBot::Plugin.define "rss" do
 
           @lastitem[name] = items.first.guid.content if(items.length > 0)
           items.each do |item|
-            Log.warn "Got #{items.length} items"
-            @output[name].each do |chan|
-              send_privmsg("#{name}: '#{item.description}' by #{item.author} <#{item.link}>", chan)
+            Log.info "RSS2 plugin: Got #{items.length} items"
+            if not Manager.workers[:EFnet].nil? and Manager.workers[:EFnet].connected?
+              Manager.workers[:EFnet].send_privmsg("#{name}: '#{item.description}' by #{item.author} <#{item.link}>", '#dragonflybsd')
             end
           end
           end
@@ -71,10 +68,7 @@ FBSDBot::Plugin.define "rss" do
   end
 
   def on_join(action)
-    if not Manager.workers[:EFnet].nil? and Manager.workers[:EFnet].connected?
-      Manager.workers[:EFnet].send_privmsg('test', '#bot-test.no')
-    end
     return if @started
-    #@started = true
+    @started = true
   end
 end
