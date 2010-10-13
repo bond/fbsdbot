@@ -7,6 +7,7 @@ module FBSDBot
     class NetworkHandler
     
       attr_reader :nick, :port, :realname, :username, :start_time, :retry_in_seconds
+      attr_accessor :workers
     
       def initialize(config)
         @workers = Hash.new

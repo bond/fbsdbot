@@ -10,7 +10,7 @@ Log.level = $DEBUG ? :debug : :info
 Log.color = $config[:color]
 
 
-manager = FBSDBot::IRC::NetworkHandler.new($config)
+Manager = FBSDBot::IRC::NetworkHandler.new($config)
 at_exit do
   FBSDBot::Plugin.run_event(FBSDBot::ShutdownEvent.new)
   [$stdout, $stderr].each { |io| io.flush }
@@ -27,5 +27,5 @@ EventMachine::run {
 
   Log.info "Starting Workers:"
 
-  manager.create_workers
+  Manager.create_workers
 }
