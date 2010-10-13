@@ -5,6 +5,7 @@
 # =====================
 
 require 'uri'
+require 'cgi'
 require 'rss/1.0'
 require 'rss/2.0'
 
@@ -57,7 +58,17 @@ FBSDBot::Plugin.define "rss" do
           items.each do |item|
             Log.info "RSS2 plugin: Got #{items.length} items"
             if not Manager.workers[:EFnet].nil? and Manager.workers[:EFnet].connected?
-              Manager.workers[:EFnet].send_privmsg("#{name}: '#{item.description}' by #{item.author} <#{item.link}>", '#dragonflybsd')
+              tinycl = EM::Protocols::HttpClient2.connect( 'tinyurl.com', 80 )
+              tinyreq = tinycl.get( "/api-create.php?url=#{CGI.escape(item.link)}")
+              tinyreq.callback{|res|
+                if(res.status == 200)
+                  Manager.workers[:EFnet].send_privmsg("#{name}: '#{item.description}' by #{item.author} <#{res.content}>", '#dragonflybsd')
+                else
+                  Log.warn "RSS2: tinyurl.com returned #{res.status}"
+                  Manager.workers[:EFnet].send_privmsg("#{name}: '#{item.description}' by #{item.author} <#{item.link}>", '#dragonflybsd')
+                end
+              }
+
             end
           end
           end
